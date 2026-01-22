@@ -54,7 +54,8 @@ class _ProductListScreenState extends State<ProductListScreen> {
     }
 
     return Scaffold(
-      appBar: AppBar(title: Text("All Product")),
+      backgroundColor: Colors.white,
+      appBar: AppBar(title: Text("All Product"), backgroundColor: Colors.white), 
       body: ListView.builder(
         padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 10),
         itemCount: product.length,
@@ -62,7 +63,7 @@ class _ProductListScreenState extends State<ProductListScreen> {
           return ListTile(
             leading: Image.network(product[index].thumbnail!),
             title: Text(product[index].title!),
-            subtitle: Text("${product[index].price.toString()} ฿"),
+            subtitle: Text("\$ ${product[index].price.toString()}"),
             onTap: () => onGoDetail(ctx, product[index]),
           );
         },
