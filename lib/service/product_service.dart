@@ -7,7 +7,7 @@ class ProductService {
   Future<List<Product>> getProducts() async {
     try {
       final response = await http.get(
-        Uri.parse("https://dummyjson.com/products2"),
+        Uri.parse("https://dummyjson.com/products"),
       );
 
       if (response.statusCode == 200) {
