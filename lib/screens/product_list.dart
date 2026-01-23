@@ -11,35 +11,16 @@ class ProductListScreen extends StatefulWidget {
 }
 
 class _ProductListScreenState extends State<ProductListScreen> {
-  List<Product> product = [
-    Product(
-      id: 1,
-      title: "name12",
-      description: "description",
-      images: [
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRqvFdpefJi2hOnOjNhVL78frJ-clk2_NqW8Q&s",
-      ],
-      thumbnail:
-          "https://cdn.dummyjson.com/product-images/beauty/essence-mascara-lash-princess/thumbnail.webp",
-      price: 200,
-    ),
-  ];
+  late Future<List<Product>> productFuture;
 
-  Future<void> _fetchProduct() async {
-    try {
-      final data = await ProductService().getProducts();
-      setState(() {
-        product = data;
-      });
-    } catch (e) {
-      print(e);
-    }
+  Future<List<Product>> _fetchProduct() async {
+    return await ProductService().getProducts();
   }
 
   @override
   void initState() {
     super.initState();
-    _fetchProduct();
+    productFuture = _fetchProduct();
   }
 
   @override
@@ -55,16 +36,84 @@ class _ProductListScreenState extends State<ProductListScreen> {
 
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(title: Text("All Product"), backgroundColor: Colors.white), 
-      body: ListView.builder(
-        padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 10),
-        itemCount: product.length,
-        itemBuilder: (ctx, int index) {
-          return ListTile(
-            leading: Image.network(product[index].thumbnail!),
-            title: Text(product[index].title!),
-            subtitle: Text("\$ ${product[index].price.toString()}"),
-            onTap: () => onGoDetail(ctx, product[index]),
+      appBar: AppBar(
+        title: Text(
+          "All Product",
+          style: Theme.of(context).textTheme.titleLarge!.copyWith(
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
+          ),
+        ),
+        backgroundColor: Theme.of(context).colorScheme.primary,
+      ),
+      body: FutureBuilder(
+        future: productFuture,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(
+              child: CircularProgressIndicator(
+                color: Theme.of(context).colorScheme.primary,
+              ),
+            );
+          }
+
+          if (snapshot.hasError) {
+            return Center(
+              child: Column(
+                spacing: 8,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.system_security_update_warning_outlined,
+                    color: Theme.of(context).colorScheme.primary,
+                    size: 100,
+                  ),
+                  Text(
+                    "Something went wrong",
+                    style: Theme.of(context).textTheme.headlineMedium!.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.9,
+                    child: Text(
+                      "Unable to connect to application. Please check your internet",
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                      setState(() {
+                        productFuture = _fetchProduct();
+                      });
+                    },
+                    child: Text("Refresh"),
+                  ),
+                ],
+              ),
+            );
+          }
+
+          List<Product> product = snapshot.data!;
+
+          return ListView.builder(
+            padding: const EdgeInsets.only(
+              top: 4,
+              left: 10,
+              right: 10,
+              bottom: 25,
+            ),
+            itemCount: product.length,
+            itemBuilder: (ctx, int index) {
+              return ListTile(
+                leading: Image.network(product[index].thumbnail!),
+                splashColor: Colors.deepOrange.shade300,
+                title: Text(product[index].title!),
+                subtitle: Text("\$ ${product[index].price.toString()}"),
+                onTap: () => onGoDetail(ctx, product[index]),
+              );
+            },
           );
         },
       ),

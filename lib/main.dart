@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:punpro_test_app/screens/product_list.dart';
 
 void main() {
@@ -13,6 +14,13 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: "Punpro test",
+      theme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: Colors.orange,
+          primary: Colors.deepOrange,
+        ),
+        textTheme: GoogleFonts.kanitTextTheme(),
+      ),
       home: ProductListScreen(),
     );
   }

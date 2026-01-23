@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:punpro_test_app/models/product.dart';
 
 import 'package:carousel_slider/carousel_slider.dart';
@@ -18,7 +19,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(backgroundColor: Colors.white,),
+      appBar: AppBar(backgroundColor: Colors.white),
       backgroundColor: Colors.white,
       body: SizedBox.expand(
         child: Stack(
@@ -58,7 +59,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
                             color: currentImage == entry.key
-                                ? Colors.blue
+                                ? Theme.of(context).colorScheme.primary
                                 : Colors.grey,
                           ),
                         );
@@ -103,18 +104,41 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                   color: Colors.white,
                   boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 6)],
                 ),
-                // color: Colors.white,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Text(
                       "\$ ${widget.product.price}",
-                      style: Theme.of(context).textTheme.headlineMedium!.copyWith(
-                        fontWeight: FontWeight.bold,
+                      style: Theme.of(context).textTheme.headlineSmall!
+                          .copyWith(fontWeight: FontWeight.bold),
+                    ),
+                    Container(
+                      padding: EdgeInsets.zero,
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).colorScheme.primary,
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          padding: EdgeInsets.all(8),
+                          minimumSize: Size.zero,
+                          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadiusGeometry.circular(12),
+                          ),
+                          backgroundColor: Colors.transparent,
+                          shadowColor: Colors.transparent,
+                          overlayColor: Colors.grey,
+                        ),
+                        onPressed: () {},
+                        child: Icon(
+                          Icons.shopping_basket,
+                          size: 27,
+                          color: Colors.white,
+                        ),
                       ),
                     ),
-                    ElevatedButton.icon(onPressed: (){}, label: Text("Purchase"),icon: Icon(Icons.shop),)
                   ],
                 ),
               ),
