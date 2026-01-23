@@ -1,4 +1,4 @@
-# Screen shot ของแอพ
+# Screenshot ของแอพ
 ![หน้า Product-list](https://github.com/user-attachments/assets/63522ab1-f2b1-4d47-b7dd-17239a270ac5)
 ![หน้า Product-list (call api error)](https://github.com/user-attachments/assets/d63f631a-f7be-4739-90d1-ac9289fa0362)
 ![หน้า Product-detail](https://github.com/user-attachments/assets/61fa88f1-96d2-4ddd-bbbe-a2d3e53e0639)
