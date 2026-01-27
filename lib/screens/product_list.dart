@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:punpro_test_app/models/product.dart';
+import 'package:punpro_test_app/providers/products_provider.dart';
 import 'package:punpro_test_app/screens/product_detail.dart';
 import 'package:punpro_test_app/service/product_service.dart';
 
-class ProductListScreen extends StatefulWidget {
+class ProductListScreen extends ConsumerStatefulWidget {
   const ProductListScreen({super.key});
 
   @override
-  State<ProductListScreen> createState() => _ProductListScreenState();
+  ConsumerState<ProductListScreen> createState() => _ProductListScreenState();
 }
 
-class _ProductListScreenState extends State<ProductListScreen> {
+class _ProductListScreenState extends ConsumerState<ProductListScreen> {
   late Future<List<Product>> productFuture;
 
   Future<List<Product>> _fetchProduct() async {
@@ -26,10 +28,11 @@ class _ProductListScreenState extends State<ProductListScreen> {
   @override
   Widget build(BuildContext context) {
     void onGoDetail(BuildContext context, Product product) {
+      ref.read(productDetailProvider.notifier).saveDatil(product);
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (ctx) => ProductDetailScreen(product: product),
+          builder: (ctx) => ProductDetailScreen(),
         ),
       );
     }

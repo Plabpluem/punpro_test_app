@@ -1,23 +1,26 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:punpro_test_app/models/product.dart';
 
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:punpro_test_app/providers/products_provider.dart';
 
-class ProductDetailScreen extends StatefulWidget {
-  const ProductDetailScreen({super.key, required this.product});
+class ProductDetailScreen extends ConsumerStatefulWidget {
+  const ProductDetailScreen({super.key/* , required this.product */});
 
-  final Product product;
+  // final Product product;
 
   @override
-  State<ProductDetailScreen> createState() => _ProductDetailScreenState();
+  ConsumerState<ProductDetailScreen> createState() => _ProductDetailScreenState();
 }
 
-class _ProductDetailScreenState extends State<ProductDetailScreen> {
+class _ProductDetailScreenState extends ConsumerState<ProductDetailScreen> {
+
   int currentImage = 0;
 
   @override
   Widget build(BuildContext context) {
+    final product = ref.watch(productDetailProvider);
     return Scaffold(
       appBar: AppBar(backgroundColor: Colors.white),
       backgroundColor: Colors.white,
@@ -32,16 +35,16 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    if (widget.product.images!.isNotEmpty)
+                    if (product.images!.isNotEmpty)
                       CarouselSlider(
-                        items: widget.product.images?.map((image) {
+                        items: product.images?.map((image) {
                           return Image.network(image);
                         }).toList(),
                         options: CarouselOptions(
                           height: 400,
                           viewportFraction: 1,
                           enableInfiniteScroll:
-                              widget.product.images!.length > 1,
+                              product.images!.length > 1,
                           onPageChanged: (index, reason) => setState(() {
                             currentImage = index;
                           }),
@@ -49,7 +52,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                       ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
-                      children: widget.product.images!.asMap().entries.map((
+                      children: product.images!.asMap().entries.map((
                         entry,
                       ) {
                         return Container(
@@ -76,19 +79,19 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            "${widget.product.title}",
+                            "${product.title}",
                             style: Theme.of(context).textTheme.headlineMedium!
                                 .copyWith(fontWeight: FontWeight.bold),
                           ),
                           Text(
-                            "${widget.product.description}",
+                            "${product.description}",
                             style: Theme.of(context).textTheme.bodyLarge,
                           ),
                         ],
                       ),
                     ),
 
-                    // Stack(child: Container(child: Text("${widget.product.price}")))
+                    // Stack(child: Container(child: Text("${product.price}")))
                   ],
                 ),
               ),
@@ -109,7 +112,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Text(
-                      "\$ ${widget.product.price}",
+                      "\$ ${product.price}",
                       style: Theme.of(context).textTheme.headlineSmall!
                           .copyWith(fontWeight: FontWeight.bold),
                     ),
